@@ -51,4 +51,13 @@ def test_character_damaged():
     Character1.attack(20, Character2)
     assert Character2.hitpoints == 3
 
-    
+def test_character_stats_present():
+    Character2 = Character('Keith', 'Lawful-Evil')
+    Character2.stats(1, 2, 3, 4, 5, 6)
+    assert Character2.Strength == 1
+
+def test_character_modifier():
+    Character1 = Character('SpaceBun', 'Chaotic-goood')
+    Character1.stats(15, 15, 15, 15, 15, 15)
+    # Str = Character1.Strength
+    assert Character1.modifier(15) == 2
