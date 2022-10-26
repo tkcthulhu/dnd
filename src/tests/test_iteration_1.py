@@ -1,4 +1,8 @@
-from evercraft.character import Character
+from evercraft.character import Character, Test
+
+def test_test_class():
+    t = Test('Josh', 'Evil', strength=10, dex=20)
+    assert t.strength == 10
 
 def test_character_exists():
     assert Character('Doug', 'Lawful-Evil')
@@ -58,6 +62,27 @@ def test_character_stats_present():
 
 def test_character_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
-    Character1.stats(15, 15, 15, 15, 15, 15)
-    # Str = Character1.Strength
-    assert Character1.modifier(15) == 2
+    Character1.stats(17, 15, 15, 15, 15, 15)
+    Str = Character1.Strength
+    assert Str == 17
+    assert Character1.modifier(Str) == 3
+
+def test_const_modifier():
+    Character1 = Character('SpaceBun', 'Chaotic-goood')
+    Character1.stats(17, 15, 15, 15, 15, 15)
+    # Const = Character1.Constitution
+    assert Character1.const_mod == 2
+    assert Character1.hitpoints == 7
+
+def test_dex_modifier():
+    Character1 = Character('SpaceBun', 'Chaotic-goood')
+    Character1.stats(17, 1, 15, 15, 15, 15)
+    assert Character1.armor == 5
+
+def test_str_mod():
+    Character1 = Character('SpaceBun', 'Chaotic-goood')
+    Character2 = Character('Keith', 'Lawful-Evil')
+    Character1.stats(15, 1, 15, 15, 15, 15)
+    Character2.stats(17, 1, 15, 15, 15, 15)
+    Character1.attack(20, Character2)
+    assert Character2.hitpoints == 1
