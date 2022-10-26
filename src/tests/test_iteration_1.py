@@ -21,28 +21,17 @@ def test_armor_class_hit():
     
 def test_character_hit_points():
     Character1 = Character('Cuck', 'Lawful')
-    assert Character1.baseHP == 5
+    assert Character1.base_hp == 5
 
 def test_character_attack():
     Character1 = Character('Cuck', 'Lawful')
     Character2 = Character('Keith', 'Lawful-Evil')    
     assert Character1.attack(5, Character2) == 'MISS'
 
-def test_character_hit():
-    Character1 = Character('Cuck', 'Lawful')
-    Character2 = Character('Keith', 'Lawful-Evil')
-    assert Character1.attack(20, Character2) == 'CRIT'
-
-def test_character_hit_EAC():
-    Character1 = Character('Cuck', 'Lawful')
-    Character2 = Character('Keith', 'Lawful-Evil')
-    assert Character1.attack(4, Character2) == False
-
 def test_character_hit_EAC():
     Character1 = Character('Cuck', 'Lawful')
     Character2 = Character('Keith', 'Lawful-Evil')
     assert Character1.attack(15, Character2) == "HIT"
-    assert Character2.hit_points == 4
 
 def test_character_nat_20():
     Character1 = Character('Skisgaar', 'Chaotic-good')
@@ -53,47 +42,48 @@ def test_character_damaged():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
     Character2 = Character('Keith', 'Lawful-Evil')
     Character1.attack(20, Character2)
-    assert Character2.hit_points == 3
+    assert Character2.current_HP == 3
 
 def test_character_stats_present():
     Character2 = Character('Keith', 'Lawful-Evil')
-    Character2.stats(1, 2, 3, 4, 5, 6)
-    assert Character2.Strength == 1
+    assert Character2.strength == 10
 
 def test_character_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
-    Character1.stats(17, 15, 15, 15, 15, 15)
-    Str = Character1.Strength
+    Character1.strength = 17
+    Str = Character1.strength
+    Character1.current_modifiers()
     assert Str == 17
-    assert Character1.modifier(Str) == 3
+    assert Character1.str_mod == 3
 
 def test_const_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
-    Character1.stats(17, 15, 15, 15, 15, 15)
-    # Const = Character1.Constitution
-    assert Character1.const_mod == 2
-    assert Character1.hit_points == 7
+    Character1.current_modifiers()
+    assert Character1.const_mod == 0
+
 
 def test_dex_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
-    Character1.stats(17, 1, 15, 15, 15, 15)
-    assert Character1.armor_class == 5
+    Character1.dexterity = 17
+    Character1.current_modifiers()
+    assert Character1.dex_mod == 3
+    assert Character1.armor_class == 13
 
 def test_str_mod():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
     Character2 = Character('Keith', 'Lawful-Evil')
-    Character1.stats(15, 1, 15, 15, 15, 15)
-    Character2.stats(17, 1, 15, 15, 15, 15)
+    Character1.strength = 15
     Character1.attack(20, Character2)
-    assert Character2.hit_points == 1
+    assert Character2.current_HP == -1
 
 def test_character_hit():
-    Character1 = Character('SpaceBun', 'Chaotic-goood')
-    Character2 = Character('Keith', 'Lawful-Evil')
-    Character1.stats(21, 15, 15, 15, 15, 15)
-    Character2.stats(17, 1, 15, 15, 15, 15)
-    Character1.attack(15, Character2)
-    assert Character2.hit_points == 1
+    Character1 = Character('SpaceBun', 'Chaotic-goood', strength=15)
+    # str mod +2
+    Character2 = Character('Keith', 'Lawful-Evil', dexterity=7)
+    # dex mod -2
+    Character1.attack(9, Character2)
+
+    assert Character2.current_HP == 2
 
 def test_str_mod_roll():
 
@@ -184,3 +174,11 @@ def test_character_level_scales():
 
 def test_defaults():
     Character1 = Character('Morgan', 'CE', Character.DEFAULT_ATTRIBUTES)
+
+def test_new_dex():
+    Character1 = Character('Dumb', 'align')
+    Character1.dexterity = 20
+    assert Character1.strength == 10
+    assert Character1.dexterity == 20
+
+
