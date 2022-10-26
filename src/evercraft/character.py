@@ -1,34 +1,4 @@
-#create an object class
-#needs to take parameters/attributes for:
-#   Name
-#   [X] can we create a character
-#   [x] can we name the character
-#   Alignment
-#   [x] does the character have alignment
-#   [x] can you change
-#   [x] Armor Class
-#   [x] Hit points
-#   [x] can attack(method?)
-#       pass in (roll, enemy)
-#   [x] attack can change
-#   damage another character
-#   [x] can we prove damage was given
-#       IF attack is successful
-#           do damage
-#       ELSE
-#           no damage
-#   [x] can we define the damage (1 for regular, 2 for critical)
-#   abilities scores applied
-#   [X] character has the 6 abilities
-#   MODIFIER
-#   [x] create a dynamic modifier based on level
-#   modifier(level) -> if level == 1 -> modifer == -5 ect
-#   [] strength will change roll and damage delt
-#   [] Dexterity will change armor
-#   [] Constitution will change the hp
-# Character xp
-#   [] Character has xp
-#   [] character can gain 10 xp with each hit
+import math
 
 class Test:
     def __init__(self, name, align, **abilities):
@@ -42,25 +12,39 @@ class Test:
 
 class Character:
 
+    DEFAULT_ATTRIBUTES = {
+        "strength": 10, 
+        "dexterity":10,
+        "constitution":10,
+        "wisdom": 10,
+        "intelligence": 10,
+        "charisma": 10,
+        "base_hp": 5,
+        "armor_class": 10,
+        "xp": 0,
+        "player_level": 1,
+    }
+
     first = ['Chaotic', 'Neutral', 'Lawful']
 
     second = ['Evil', 'Good', 'Neutral']
     
-    def __init__(self, name, align):
+    def __init__(self, name, align, **DEFAULT_ATTRIBUTES):
         self.name = name
         self.alignment = align
-        self.armor = 10
-        self.hitpoints = 5
 
-    def stats(self, Str, Dex, Const, Wis, Int, Char):
-        self.Strength = Str
-        self.str_mod = self.modifier(Str)
-        self.Dexterity = Dex
-        self.dex_mod = self.modifier(Dex)
-        self.armor += self.dex_mod
-        self.Constitution = Const
-        self.const_mod = self.modifier(Const)
-        self.hitpoints += self.const_mod
+        for key in DEFAULT_ATTRIBUTES:
+            setattr(self, key, DEFAULT_ATTRIBUTES[key])
+
+    def stats(self, strength, dexterity, constitution, Wis, Int, Char):
+        self.strength = strength
+        self.str_mod = self.modifier(strength)
+        self.dexterity = dexterity
+        self.dex_mod = self.modifier(dexterity)
+        self.armor_class += self.dex_mod
+        self.constitution = constitution
+        self.const_mod = self.modifier(constitution)
+        self.max_HP = self.baseHP + self.const_mod
         self.Wisdom = Wis
         self.Intelligence = Int
         self.Charisma = Char  
@@ -86,28 +70,35 @@ class Character:
             return 3
         if level == 18 or level == 19:
             return 4
-        if level == 20:
+        if level >= 20:
             return 5
     
     def attack(self, roll, enemy):
         enemy = enemy
-        EAC = enemy.armor
+        EAC = enemy.armor_class
         if roll == 20:
             self.damage('crit', enemy)
+            self.xp += 10
+            self.player_level = math.floor((self.xp/1000)+1)
             return 'CRIT'
-        elif EAC < roll:
+        elif EAC < roll + self.str_mod:
             self.damage('hit', enemy)
+            self.xp += 10
+            self.player_level = math.floor((self.xp/1000)+1)
             return "HIT"
-        elif EAC > roll:
+        elif EAC >= roll + self.str_mod:
             return "MISS"
+
+    def level_check(self):
+        self.max_HP = self.baseHP + (self.player_level * 5) + (self.player_level * self.const_mod)
 
     def damage(self, hit, enemy):
         if hit == 'crit':
-            setattr(enemy, 'hitpoints', enemy.hitpoints - 2 - (self.str_mod * 2))
-            return enemy.hitpoints
+            setattr(enemy, 'hit_points', enemy.hit_points - 2 - (self.str_mod * 2))
+            return enemy.hit_points
         if hit == 'hit':
-            setattr(enemy, 'hitpoints', enemy.hitpoints - 1)
-            return enemy.hitpoints
+            setattr(enemy, 'hit_points', enemy.hit_points - 1 - (self.str_mod))
+            return enemy.hit_points
 
 
 
