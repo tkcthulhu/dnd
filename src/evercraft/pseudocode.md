@@ -45,8 +45,21 @@
 - HP is higher + 7 to base (12 start)
 - Every level hp increases by 7 + const mod
 - add two damage to each crit
+- on level up barb gains 2 strength
 
 # Wizard
 - Starts with 6 hp
 - hp goes up by four by level
 - crit modifier is and roll modifier is affected by intelligence 
+- wizards start with intelligence 13
+- on level up wizard gains 2 intelligence 
+
+# Fighter
+- starts with 10 hp
+- attacks roll is increased by 1 for every level instead of every other level
+- crit modifier is affected by charisma
+- roll modifier is affected by dexterity
+- starts with 12 dex
+- starts with 12 charisma
+- dex levels with player level
+- gains 10 hit points + const mod per level instead of 5

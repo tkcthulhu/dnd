@@ -21,12 +21,12 @@ class Combat:
             attacker.xp += 10
             attacker.player_level = math.floor((attacker.xp/1000)+1)
             return 'CRIT'
-        elif EAC < roll + attacker.strength.modifier + (attacker.player_level // 2):
+        elif EAC < roll + attacker.roll_modifier + (attacker.player_level // 2):
             Combat.damage(attacker, 'hit', enemy)
             attacker.xp += 10
             attacker.player_level = math.floor((attacker.xp/1000)+1)
             return "HIT"
-        elif EAC >= roll + attacker.strength.modifier + (attacker.player_level // 2):
+        elif EAC >= roll + attacker.roll_modifier + (attacker.player_level // 2):
             return "MISS"    
 
     def damage(attacker, hit, enemy):
@@ -68,10 +68,12 @@ class Character:
 
         self.hp_gain = hp_gain
 
-        self.max_hp = ((base_hp + self.constitution.modifier) + (((self.player_level - 1) * self.hp_gain)+ self.constitution.modifier))
+        self.max_hp = ((base_hp + self.constitution.modifier) + ((self.player_level - 1) * (self.hp_gain + self.constitution.modifier)))
 
         if self.max_hp <= 0:
             self.max_hp = 1
+
+        self.roll_modifier = self.strength.modifier
         
         self.crit_modifier = self.strength.modifier * 2
 
@@ -85,11 +87,32 @@ class Character:
 
 class Barbarian(Character):
     def __init__(self, name, align, **abilities):
-        super().__init__(name, align, base_hp = 12, hp_gain = 7, **abilities)
+        super().__init__(name, align, base_hp = 12, hp_gain = 7, strength = 12, constitution = 12,  **abilities)
         self.crit_modifier = (self.strength.modifier * 2) + 2
+        self.strength.level += ((self.player_level - 1) * 2)
+        self.strength.modifier = Stats.set_modifier(self.strength.level)
+        self.constitution.level += ((self.player_level - 1) * 2)
+        self.constitution.modifier = Stats.set_modifier(self.constitution.level)
 
-    print('butt')
+class Wizard(Character):
+     def __init__(self, name, align, **abilities):
+        super().__init__(name, align, base_hp = 6, hp_gain = 4, intelligence=12, wisdom=12, **abilities)
+        self.roll_modifier = self.intelligence.modifier
+        self.crit_modifier = (self.intelligence.modifier * 2)
+        self.intelligence.level += ((self.player_level - 1) * 2)
+        self.intelligence.modifier = Stats.set_modifier(self.intelligence.level)
+        self.wisdom.level += ((self.player_level - 1) * 2)
+        self.wisdom.modifier = Stats.set_modifier(self.wisdom.level)
     
+class Fighter(Character):
+    def __init__(self, name, align, **abilities):
+        super().__init__(name, align, base_hp = 10, hp_gain = 10, dexterity=12, charisma=12, **abilities)
+        self.roll_modifier = self.dexterity.modifier
+        self.crit_modifier = (self.charisma.modifier * 2)
+        self.dexterity.level += ((self.player_level - 1) * 2)
+        self.dexterity.modifier = Stats.set_modifier(self.dexterity.level)
+        self.charisma.level += ((self.player_level - 1) * 2)
+        self.charisma.modifier = Stats.set_modifier(self.charisma.level)
 
 
    
