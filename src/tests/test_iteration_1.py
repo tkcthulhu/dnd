@@ -174,4 +174,10 @@ def test_morgan_vs_keith():
 
     assert Keith.death == True
 
+def test_ability_loop():
+    T = Test('T', 'Q')
+    assert T.strength == 10
 
+def test_overwrite_loop():
+    T = Test('T', 'Q', strength = 15)
+    assert T.strength == 15

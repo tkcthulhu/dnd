@@ -1,12 +1,23 @@
 import math
 
 class Test:
+
+    DEFAULT_ATTRIBUTES = {
+        'strength' : 10, 
+        'dexterity' : 10, 
+        'constitution' : 10, 
+        'wisdom' : 10, 
+        'intelligence' : 10, 
+        'charisma' : 10,
+        'player_level' : 1
+    }
+
     def __init__(self, name, align, **abilities):
         self.name = name
         self.align = align
 
-        for key in abilities:
-            setattr(self, key, abilities[key])
+        for key in self.DEFAULT_ATTRIBUTES:
+            setattr(self, key, self.DEFAULT_ATTRIBUTES[key])
 
 def set_modifier(level):
     return math.floor((level - 10) / 2)
