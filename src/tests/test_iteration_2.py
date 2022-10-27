@@ -38,6 +38,19 @@ def test_leveled_up_modifier():
     assert Dave.strength.level == 18
     assert Dave.strength.modifier == 4
 
+def test_barb_roll_scale():
+    Dave = Barbarian('Dave', 'Mad Decent', player_level = 2)
+    assert Dave.strength.level == 14
+    assert Dave.strength.modifier == 2
+    assert Dave.roll_modifier == 3
+
+def test_barb_scale_level_5():
+    Dave = Barbarian('Dave', 'Mad Decent', player_level = 5)
+    assert Dave.strength.level == 20
+    assert Dave.strength.modifier == 5
+    assert Dave.roll_modifier == 7
+    assert Dave.max_hp == 45
+
 def test_class_wizard():
     assert Wizard('Willie', 'Shy-Evil')
 
@@ -59,6 +72,18 @@ def test_class_wizard():
     Willie = Wizard('Willie', 'Shy-Evil', player_level=4)
     assert Willie.intelligence.level == 18
     assert Willie.intelligence.modifier == 4
+
+def test_class_wizard_roll_scale():
+    Willie = Wizard('Willie', 'Shy-Evil', player_level=2)
+    assert Willie.intelligence.level == 14
+    assert Willie.intelligence.modifier == 2
+    assert Willie.roll_modifier == 3
+
+def test_class_wizard_roll_scale_level_4():
+    Willie = Wizard('Willie', 'Shy-Evil', player_level=4)
+    assert Willie.intelligence.level == 18
+    assert Willie.intelligence.modifier == 4
+    assert Willie.roll_modifier == 6
     
 def test_class_fighter():
     assert Fighter('Jackie', 'Chan')
@@ -82,3 +107,23 @@ def test_class_fighter_charisma_modifiers():
 def test_class_fighter_dexterity_modifiers():
     Jackie = Fighter('Jackie', 'Chan')
     assert Jackie.roll_modifier == 1
+
+def test_class_fighter_roll_scale():
+    Jackie = Fighter('Jackie', 'Chan', player_level=2)
+    assert Jackie.dexterity.level == 14
+    assert Jackie.dexterity.modifier == 2
+    assert Jackie.roll_modifier == 3
+
+def test_class_fighter_roll_scale_level3():
+    Jackie = Fighter('Jackie', 'Chan', player_level=3)
+    assert Jackie.dexterity.level == 16
+    assert Jackie.dexterity.modifier == 3
+    assert Jackie.roll_modifier == 5
+
+def test_classes_fight():
+    Jackie = Fighter('Jackie', 'Chan')
+    Willie = Wizard('Willie', 'Shy-Evil')
+    Combat.attack(Jackie, 20, Willie)
+    Combat.attack(Willie, 20, Jackie)
+    assert Jackie.current_hp == 6
+    assert Willie.current_hp == 2

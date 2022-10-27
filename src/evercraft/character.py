@@ -93,26 +93,26 @@ class Barbarian(Character):
         self.strength.modifier = Stats.set_modifier(self.strength.level)
         self.constitution.level += ((self.player_level - 1) * 2)
         self.constitution.modifier = Stats.set_modifier(self.constitution.level)
-
+        self.roll_modifier = self.strength.modifier + (self.player_level // 2)
 class Wizard(Character):
      def __init__(self, name, align, **abilities):
         super().__init__(name, align, base_hp = 6, hp_gain = 4, intelligence=12, wisdom=12, **abilities)
-        self.roll_modifier = self.intelligence.modifier
-        self.crit_modifier = (self.intelligence.modifier * 2)
         self.intelligence.level += ((self.player_level - 1) * 2)
         self.intelligence.modifier = Stats.set_modifier(self.intelligence.level)
         self.wisdom.level += ((self.player_level - 1) * 2)
         self.wisdom.modifier = Stats.set_modifier(self.wisdom.level)
+        self.roll_modifier = self.intelligence.modifier + (self.player_level // 2)
+        self.crit_modifier = (self.intelligence.modifier * 2)
     
 class Fighter(Character):
     def __init__(self, name, align, **abilities):
         super().__init__(name, align, base_hp = 10, hp_gain = 10, dexterity=12, charisma=12, **abilities)
-        self.roll_modifier = self.dexterity.modifier
-        self.crit_modifier = (self.charisma.modifier * 2)
         self.dexterity.level += ((self.player_level - 1) * 2)
         self.dexterity.modifier = Stats.set_modifier(self.dexterity.level)
         self.charisma.level += ((self.player_level - 1) * 2)
         self.charisma.modifier = Stats.set_modifier(self.charisma.level)
+        self.crit_modifier = (self.charisma.modifier * 2)
+        self.roll_modifier = self.dexterity.modifier + (self.player_level - 1)
 
 
    

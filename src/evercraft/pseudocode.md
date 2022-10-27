@@ -46,6 +46,7 @@
 - Every level hp increases by 7 + const mod
 - add two damage to each crit
 - on level up barb gains 2 strength
+- add one to roll modifier each 2 levels
 
 # Wizard
 - Starts with 6 hp
