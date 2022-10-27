@@ -1,8 +1,6 @@
 from evercraft.character import *
+from evercraft.test_class import *
 
-def test_test_class():
-    t = Test('Josh', 'Evil', strength=10, dex=20)
-    assert t.strength == 10
 
 def test_character_exists():
     assert Character('Doug', 'Lawful-Evil')
@@ -46,22 +44,22 @@ def test_character_damaged():
 
 def test_character_stats_present():
     Character2 = Character('Keith', 'Lawful-Evil')
-    assert Character2.strength == 10
+    assert Character2.strength.level == 10
 
 def test_character_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood', strength = 17)
-    Str = Character1.strength
+    Str = Character1.strength.level
     assert Str == 17
-    assert Character1.str_mod == 3
+    assert Character1.strength.modifier == 3
 
 def test_const_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
-    assert Character1.const_mod == 0
+    assert Character1.constitution.modifier == 0
 
 
 def test_dex_modifier():
     Character1 = Character('SpaceBun', 'Chaotic-goood', dexterity=17)
-    assert Character1.dex_mod == 3
+    assert Character1.dexterity.modifier == 3
     assert Character1.armor_class == 13
 
 def test_str_mod():
@@ -155,10 +153,9 @@ def test_character_level_scales():
     assert Character1.max_HP == 14
 
 def test_new_dex():
-    Character1 = Character('Dumb', 'align')
-    Character1.dexterity = 20
-    assert Character1.strength == 10
-    assert Character1.dexterity == 20
+    Character1 = Character('Dumb', 'align', dexterity = 20)
+    assert Character1.strength.level == 10
+    assert Character1.dexterity.level == 20
 
 def test_character_death():
     Character2 = Character('Keith', 'Lawful-Evil')
@@ -176,8 +173,31 @@ def test_morgan_vs_keith():
 
 def test_ability_loop():
     T = Test('T', 'Q')
-    assert T.strength == 10
+    assert T.strength.level == 10
 
 def test_overwrite_loop():
     T = Test('T', 'Q', strength = 15)
-    assert T.strength == 15
+    Str = T.strength
+    assert T.strength.level == 15
+
+def test_current_HP_change():
+    Testi = Character('Testicles', 'good')
+    Keith = Character('Keith', 'Bad')
+    Combat.attack(Testi, 20, Keith)
+    assert Keith.current_HP == 3
+    Combat.attack(Testi, 20, Keith)
+    assert Keith.current_HP == 1
+
+def test_minimum_hp():
+    Testicles = Character('Testicles', 'good', constitution = 1)
+    assert Testicles.current_HP == 1
+
+def test_even_level_roll():
+    Testicles = Character('Testicles', 'good', constitution = 1)
+    Keith = Character('Keith', 'Bad')
+    assert Combat.attack(Testicles, 10, Keith) == 'MISS'
+    
+def test_even_level_roll_2():
+    Testicles = Character('Testicles', 'good', constitution = 1, player_level = 2)
+    Keith = Character('Keith', 'Bad')
+    assert Combat.attack(Testicles, 10, Keith) == 'HIT'

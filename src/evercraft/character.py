@@ -1,26 +1,14 @@
 import math
 
-class Test:
+class Stats:
 
-    DEFAULT_ATTRIBUTES = {
-        'strength' : 10, 
-        'dexterity' : 10, 
-        'constitution' : 10, 
-        'wisdom' : 10, 
-        'intelligence' : 10, 
-        'charisma' : 10,
-        'player_level' : 1
-    }
+    def __init__(self, skill, level, modifier):
+        self.skill = skill
+        self.level = level
+        self.modifier = modifier
 
-    def __init__(self, name, align, **abilities):
-        self.name = name
-        self.align = align
-
-        for key in self.DEFAULT_ATTRIBUTES:
-            setattr(self, key, self.DEFAULT_ATTRIBUTES[key])
-
-def set_modifier(level):
-    return math.floor((level - 10) / 2)
+    def set_modifier(level):
+        return (level - 10) // 2
 
 class Combat: 
 
@@ -33,22 +21,22 @@ class Combat:
             attacker.xp += 10
             attacker.player_level = math.floor((attacker.xp/1000)+1)
             return 'CRIT'
-        elif EAC < roll + attacker.str_mod:
+        elif EAC < roll + attacker.strength.modifier + (attacker.player_level // 2):
             Combat.damage(attacker, 'hit', enemy)
             attacker.xp += 10
             attacker.player_level = math.floor((attacker.xp/1000)+1)
             return "HIT"
-        elif EAC >= roll + attacker.str_mod:
+        elif EAC >= roll + attacker.strength.modifier + (attacker.player_level // 2):
             return "MISS"    
 
     def damage(attacker, hit, enemy):
         enemy.current_condition()
         if hit == 'crit':
-            setattr(enemy, 'current_HP', enemy.current_HP - 2 - (attacker.str_mod * 2))
+            setattr(enemy, 'current_HP', enemy.current_HP - 2 - (attacker.strength.modifier * 2))
             enemy.current_condition()
             return enemy.current_HP
         if hit == 'hit':
-            setattr(enemy, 'current_HP', enemy.current_HP - 1 - (attacker.str_mod))
+            setattr(enemy, 'current_HP', enemy.current_HP - 1 - (attacker.strength.modifier))
             enemy.current_condition()
             return enemy.current_HP
 
@@ -65,36 +53,36 @@ class Character:
         'wisdom' : 10, 
         'intelligence' : 10, 
         'charisma' : 10,
-        'player_level' : 1
     }
     
-    def __init__(self, name, align, strength = 10, dexterity = 10, constitution = 10, wisdom = 10, intelligence = 10, charisma = 10, player_level = 1, base_hp = 5):
+    def __init__(self, name, align, player_level = 1, base_hp = 5, **abilities):
         self.name = name
         self.alignment = align
         self.base_hp = base_hp
         self.armor_class = 10
         self.xp = 0
         self.player_level = player_level
-        self.strength = strength        
-        self.dexterity = dexterity
-        self.constitution = constitution
-        self.wisdom = wisdom
-        self.intelligence = intelligence
-        self.charisma = charisma
-        self.armor_class += set_modifier(dexterity)
-        self.max_HP = (base_hp + set_modifier(constitution)) * player_level
-        self.current_HP = (5 + set_modifier(constitution)) * player_level
-        self.str_mod = set_modifier(strength)
-        self.dex_mod = set_modifier(dexterity)
-        self.const_mod = set_modifier(constitution)
+        
+        for key in self.DEFAULT_ATTRIBUTES:
+            level = abilities[key] if (key in abilities) else self.DEFAULT_ATTRIBUTES[key]
+            mod = Stats(key, level, Stats.set_modifier(level))
+            setattr(self, key, mod)
+
+        self.armor_class += self.dexterity.modifier
+
+        self.max_HP = ((base_hp + self.constitution.modifier) * player_level)
+
+        if self.max_HP <= 0:
+            self.max_HP = 1
+        
+        self.current_HP = self.max_HP
+
         self.death = False
 
     def current_condition(self):
         if self.current_HP <= 0:
             self.death = True
 
-    def level_check(self):
-        self.max_HP = self.baseHP + (self.player_level * 5) + (self.player_level * self.const_mod)
 
 
 
