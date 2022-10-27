@@ -32,19 +32,15 @@ class Combat:
     def damage(attacker, hit, enemy):
         enemy.current_condition()
         if hit == 'crit':
-            setattr(enemy, 'current_HP', enemy.current_HP - 2 - (attacker.strength.modifier * 2))
+            setattr(enemy, 'current_hp', enemy.current_hp - 2 - (attacker.crit_modifier))
             enemy.current_condition()
-            return enemy.current_HP
+            return enemy.current_hp
         if hit == 'hit':
-            setattr(enemy, 'current_HP', enemy.current_HP - 1 - (attacker.strength.modifier))
+            setattr(enemy, 'current_hp', enemy.current_hp - 1 - (attacker.strength.modifier))
             enemy.current_condition()
-            return enemy.current_HP
+            return enemy.current_hp
 
 class Character:
-
-    first = ['Chaotic', 'Neutral', 'Lawful']
-
-    second = ['Evil', 'Good', 'Neutral']
 
     DEFAULT_ATTRIBUTES = {
         'strength' : 10, 
@@ -55,7 +51,7 @@ class Character:
         'charisma' : 10,
     }
     
-    def __init__(self, name, align, player_level = 1, base_hp = 5, **abilities):
+    def __init__(self, name, align, player_level = 1, base_hp = 5, hp_gain = 5, **abilities):
         self.name = name
         self.alignment = align
         self.base_hp = base_hp
@@ -70,18 +66,33 @@ class Character:
 
         self.armor_class += self.dexterity.modifier
 
-        self.max_HP = ((base_hp + self.constitution.modifier) * player_level)
+        self.hp_gain = hp_gain
 
-        if self.max_HP <= 0:
-            self.max_HP = 1
+        self.max_hp = ((base_hp + self.constitution.modifier) + (((self.player_level - 1) * self.hp_gain)+ self.constitution.modifier))
+
+        if self.max_hp <= 0:
+            self.max_hp = 1
         
-        self.current_HP = self.max_HP
+        self.crit_modifier = self.strength.modifier * 2
+
+        self.current_hp = self.max_hp
 
         self.death = False
 
     def current_condition(self):
-        if self.current_HP <= 0:
+        if self.current_hp <= 0:
             self.death = True
+
+class Barbarian(Character):
+    def __init__(self, name, align, **abilities):
+        super().__init__(name, align, base_hp = 12, hp_gain = 7, **abilities)
+        self.crit_modifier = (self.strength.modifier * 2) + 2
+
+    print('butt')
+    
+
+
+   
 
 
 

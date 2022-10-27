@@ -40,7 +40,7 @@ def test_character_damaged():
     Character1 = Character('SpaceBun', 'Chaotic-goood')
     Character2 = Character('Keith', 'Lawful-Evil')
     Combat.attack(Character1, 20, Character2)
-    assert Character2.current_HP == 3
+    assert Character2.current_hp == 3
 
 def test_character_stats_present():
     Character2 = Character('Keith', 'Lawful-Evil')
@@ -66,7 +66,7 @@ def test_str_mod():
     Character1 = Character('SpaceBun', 'Chaotic-goood', strength=15)
     Character2 = Character('Keith', 'Lawful-Evil')
     Combat.attack(Character1, 20, Character2)
-    assert Character2.current_HP == -1
+    assert Character2.current_hp == -1
 
 def test_character_hit():
     Character1 = Character('SpaceBun', 'Chaotic-goood', strength=15)
@@ -75,7 +75,7 @@ def test_character_hit():
     # dex mod -2
     Combat.attack(Character1, 9, Character2)
 
-    assert Character2.current_HP == 2
+    assert Character2.current_hp == 2
 
 def test_str_mod_roll():
 
@@ -150,7 +150,7 @@ def test_character_can_level_up2():
 
 def test_character_level_scales():
     Character1 = Character('Morgan', 'Chaotic-good-ish', constitution=15, player_level=2)
-    assert Character1.max_HP == 14
+    assert Character1.max_hp == 14
 
 def test_new_dex():
     Character1 = Character('Dumb', 'align', dexterity = 20)
@@ -159,7 +159,7 @@ def test_new_dex():
 
 def test_character_death():
     Character2 = Character('Keith', 'Lawful-Evil')
-    Character2.current_HP = 0
+    Character2.current_hp = 0
     Character2.current_condition()
     assert Character2.death == True
 
@@ -180,17 +180,17 @@ def test_overwrite_loop():
     Str = T.strength
     assert T.strength.level == 15
 
-def test_current_HP_change():
+def test_current_hp_change():
     Testi = Character('Testicles', 'good')
     Keith = Character('Keith', 'Bad')
     Combat.attack(Testi, 20, Keith)
-    assert Keith.current_HP == 3
+    assert Keith.current_hp == 3
     Combat.attack(Testi, 20, Keith)
-    assert Keith.current_HP == 1
+    assert Keith.current_hp == 1
 
 def test_minimum_hp():
     Testicles = Character('Testicles', 'good', constitution = 1)
-    assert Testicles.current_HP == 1
+    assert Testicles.current_hp == 1
 
 def test_even_level_roll():
     Testicles = Character('Testicles', 'good', constitution = 1)

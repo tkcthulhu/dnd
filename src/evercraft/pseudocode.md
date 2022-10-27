@@ -38,3 +38,15 @@
 #   status (poisoned, burned ect)
 #   equipment
 #   armor
+
+
+
+# Barbarian
+- HP is higher + 7 to base (12 start)
+- Every level hp increases by 7 + const mod
+- add two damage to each crit
+
+# Wizard
+- Starts with 6 hp
+- hp goes up by four by level
+- crit modifier is and roll modifier is affected by intelligence 
