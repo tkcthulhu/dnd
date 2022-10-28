@@ -45,17 +45,25 @@ class Combat:
         enemy.current_condition()
         race_mod_attack = 0
         race_mod_defense = 0
+        weapon_mod = 0
+
+        if attacker.weapon == 'Dagger' or attacker.weapon == 'Longsword' or attacker.weapon == 'Great Axe':
+            weapon_mod += 1
+
+        if attacker.weapon == 'Great Axe' and attacker.class_type == 'Barbarian':
+            weapon_mod = 0
+            weapon_mod += attacker.strength.modifier
 
         if attacker.race == 'Dwarf':
             if enemy.race == 'Orc':
                 race_mod_attack += 2
         
         if hit == 'crit':
-            setattr(enemy, 'current_hp', enemy.current_hp - 2 - (attacker.crit_modifier) - race_mod_attack)
+            setattr(enemy, 'current_hp', enemy.current_hp - 2 - (attacker.crit_modifier) - race_mod_attack - weapon_mod)
             enemy.current_condition()
             return enemy.current_hp
         if hit == 'hit':
-            setattr(enemy, 'current_hp', enemy.current_hp - 1 - (attacker.strength.modifier) - race_mod_attack)
+            setattr(enemy, 'current_hp', enemy.current_hp - 1 - (attacker.strength.modifier) - race_mod_attack - weapon_mod)
             enemy.current_condition()
             return enemy.current_hp
 
@@ -96,9 +104,12 @@ class Character:
         'intelligence' : 10, 
         'charisma' : 9,
     }
+
+    WEAPONS = ['Fists', 'Dagger', 'Longsword', 'Great Axe']
     
-    def __init__(self, name, align, race = 'Human', player_level = 1, base_hp = 5, hp_gain = 5, **abilities):
+    def __init__(self, name, align, weapon = 0, race = 'Human', player_level = 1, base_hp = 5, hp_gain = 5, **abilities):
         
+        self.class_type = 'Waste of Skin'
         self.name = name
         self.alignment = align
         self.base_hp = base_hp
@@ -106,6 +117,7 @@ class Character:
         self.xp = 0
         self.player_level = player_level
         self.race = race
+        self.weapon = self.WEAPONS[weapon]
         
         if self.race == 'Human':
 
@@ -169,6 +181,7 @@ class Barbarian(Character):
     def __init__(self, name, align, **abilities):
 #   Barbarian has a + 2 to constitution and strength, they strength effects roll and crit and the constitution effects the hp 
         super().__init__(name, align, base_hp = 12, hp_gain = 7, **abilities)
+        self.class_type = 'Barbarian'
         self.strength.level += ((self.player_level - 1) * 2) + 2
         self.strength.modifier = Stats.set_modifier(self.strength.level)
         self.constitution.level += ((self.player_level - 1) * 2) + 2
@@ -182,6 +195,7 @@ class Wizard(Character):
 # Wizard has + 2 to wisdom and intelligence, wisdom effects roll and intelligence effects crit
      def __init__(self, name, align, **abilities):
         super().__init__(name, align, base_hp = 6, hp_gain = 4, **abilities)
+        self.class_type = 'Wizard'
         self.intelligence.level += ((self.player_level - 1) * 2) + 2
         self.intelligence.modifier = Stats.set_modifier(self.intelligence.level)
         self.wisdom.level += ((self.player_level - 1) * 2) + 2
@@ -193,6 +207,7 @@ class Fighter(Character):
     def __init__(self, name, align, **abilities):
 # Elf has + 2 to charisma and dexterity, his charisma and dexterity effects the crit and roll
         super().__init__(name, align, base_hp = 10, hp_gain = 10, **abilities)
+        self.class_type = 'Fighter'
         self.dexterity.level += ((self.player_level - 1) * 2) + 2
         self.dexterity.modifier = Stats.set_modifier(self.dexterity.level)
         self.charisma.level += ((self.player_level - 1) * 2) + 2
