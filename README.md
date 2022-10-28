@@ -16,6 +16,7 @@ As a combatant I want to have an armor class and hit points so that I can resist
 has an Armor Class that defaults to 10
 has 5 Hit Points by default
 Feature: Character Can Attack
+
 As a combatant I want to be able to attack other combatants so that I can survive to fight another day
 
 roll a 20 sided die (don't code the die)
