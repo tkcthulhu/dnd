@@ -59,4 +59,13 @@ def test_bellowing_dwarf_barbarian():
     assert Keith.current_hp == -31
     assert Keith.death == True
 
+def test_elf_fighter():
+    Jude = Fighter('SpaceBun', 'Chaotic-cool', race = 'Elf', player_level = 4)
+    assert Jude.max_hp == 36
+    assert Jude.charisma.level == 19
+    assert Jude.armor_class == 14
 
+def test_orc_barbarian():
+    ZAndrews = Barbarian('ZAndrews Slinger of Discs', 'Pretty Cool Dude', race = 'Orc', player_level = 5)
+    assert ZAndrews.strength.level == 22
+    assert ZAndrews.strength.modifier == 6

@@ -147,6 +147,7 @@ class Character:
 
             self.max_hp = ((base_hp + self.constitution.modifier) + ((self.player_level - 1) * (self.hp_gain + (self.constitution.modifier * 2))))
 
+# prevents death with low constitution 
         if self.max_hp <= 0:
 
             self.max_hp = 1
@@ -159,12 +160,14 @@ class Character:
 
         self.death = False
 
+# hp can go below zero but if it reaches or goes below character death equals true
     def current_condition(self):
         if self.current_hp <= 0:
             self.death = True
 
 class Barbarian(Character):
     def __init__(self, name, align, **abilities):
+#   Barbarian has a + 2 to constitution and strength, they strength effects roll and crit and the constitution effects the hp 
         super().__init__(name, align, base_hp = 12, hp_gain = 7, **abilities)
         self.strength.level += ((self.player_level - 1) * 2) + 2
         self.strength.modifier = Stats.set_modifier(self.strength.level)
@@ -176,17 +179,19 @@ class Barbarian(Character):
         self.crit_modifier = (self.strength.modifier * 2) + 2
 
 class Wizard(Character):
+# Wizard has + 2 to wisdom and intelligence, wisdom effects roll and intelligence effects crit
      def __init__(self, name, align, **abilities):
         super().__init__(name, align, base_hp = 6, hp_gain = 4, **abilities)
         self.intelligence.level += ((self.player_level - 1) * 2) + 2
         self.intelligence.modifier = Stats.set_modifier(self.intelligence.level)
         self.wisdom.level += ((self.player_level - 1) * 2) + 2
         self.wisdom.modifier = Stats.set_modifier(self.wisdom.level)
-        self.roll_modifier = self.intelligence.modifier + (self.player_level // 2)
+        self.roll_modifier = self.wisdom.modifier + (self.player_level // 2)
         self.crit_modifier = (self.intelligence.modifier * 2)
     
 class Fighter(Character):
     def __init__(self, name, align, **abilities):
+# Elf has + 2 to charisma and dexterity, his charisma and dexterity effects the crit and roll
         super().__init__(name, align, base_hp = 10, hp_gain = 10, **abilities)
         self.dexterity.level += ((self.player_level - 1) * 2) + 2
         self.dexterity.modifier = Stats.set_modifier(self.dexterity.level)
@@ -194,6 +199,7 @@ class Fighter(Character):
         self.charisma.modifier = Stats.set_modifier(self.charisma.level)
         self.roll_modifier = self.dexterity.modifier + (self.player_level - 1)
         self.crit_modifier = (self.charisma.modifier * 2)
+        self.armor_class += self.dexterity.modifier
 
 
    
