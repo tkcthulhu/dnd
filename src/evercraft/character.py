@@ -69,6 +69,7 @@ class Character:
         'intelligence' : 10, 
         'charisma' : 10,
     }
+
     ORC_ATTRIBUTES = {
         'strength' : 12, 
         'dexterity' : 10, 
@@ -77,6 +78,7 @@ class Character:
         'intelligence' : 9, 
         'charisma' : 9,
     }
+
     ELF_ATTRIBUTES = {
         'strength' : 10, 
         'dexterity' : 11, 
@@ -85,6 +87,7 @@ class Character:
         'intelligence' : 10, 
         'charisma' : 11,
     }
+
     DWARF_ATTRIBUTES = {
         'strength' : 10, 
         'dexterity' : 10, 
@@ -95,6 +98,7 @@ class Character:
     }
     
     def __init__(self, name, align, race = 'Human', player_level = 1, base_hp = 5, hp_gain = 5, **abilities):
+        
         self.name = name
         self.alignment = align
         self.base_hp = base_hp
@@ -104,22 +108,30 @@ class Character:
         self.race = race
         
         if self.race == 'Human':
+
             for key in self.DEFAULT_ATTRIBUTES:
                 level = abilities[key] if (key in abilities) else self.DEFAULT_ATTRIBUTES[key]
                 mod = Stats(key, level, Stats.set_modifier(level))
                 setattr(self, key, mod)
+
         elif self.race == "Orc":
+
             self.armor_class += 2
+
             for key in self.ORC_ATTRIBUTES:
                 level = abilities[key] if (key in abilities) else self.ORC_ATTRIBUTES[key]
                 mod = Stats(key, level, Stats.set_modifier(level))
                 setattr(self, key, mod)
+
         elif self.race == 'Elf':
+
             for key in self.ELF_ATTRIBUTES:
                 level = abilities[key] if (key in abilities) else self.ELF_ATTRIBUTES[key]
                 mod = Stats(key, level, Stats.set_modifier(level))
                 setattr(self, key, mod)
+
         elif self.race == 'Dwarf':
+
             for key in self.DWARF_ATTRIBUTES:
                 level = abilities[key] if (key in abilities) else self.DWARF_ATTRIBUTES[key]
                 mod = Stats(key, level, Stats.set_modifier(level))
@@ -132,9 +144,11 @@ class Character:
         self.max_hp = ((base_hp + self.constitution.modifier) + ((self.player_level - 1) * (self.hp_gain + self.constitution.modifier)))
         
         if self.race == 'Dwarf':
+
             self.max_hp = ((base_hp + self.constitution.modifier) + ((self.player_level - 1) * (self.hp_gain + (self.constitution.modifier * 2))))
 
         if self.max_hp <= 0:
+
             self.max_hp = 1
 
         self.roll_modifier = self.strength.modifier
