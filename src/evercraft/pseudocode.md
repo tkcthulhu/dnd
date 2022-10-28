@@ -4,34 +4,34 @@
 #   [X] can we create a character
 #   [x] can we name the character
 #   Alignment
-#   [] does the character have alignment
-#   [] can you change
-#   [] Armor Class
-#   [] Hit points
-#   [] can attack(method?)
+#   [x] does the character have alignment
+#   [x] can you change
+#   [x] Armor Class
+#   [x] Hit points
+#   [x] can attack(method?)
 #       pass in (roll, enemy)
-#   [] attack can change
+#   [x] attack can change
 #   damage another character
-#   [] can we prove damage was given
+#   [x] can we prove damage was given
 #       IF attack is successful
 #           do damage
 #       ELSE
 #           no damage
-#   [] can we define the damage (1 for regular, 2 for critical)
+#   [x] can we define the damage (1 for regular, 2 for critical)
 #   abilities scores applied
-#   [] character has the 6 abilities
+#   [x] character has the 6 abilities
 #   MODIFIER
-#   [] create a dynamic modifier based on level
+#   [x] create a dynamic modifier based on level
 #   modifier(level) -> if level == 1 -> modifer == -5 ect
-#   [] strength will change roll and damage delt
-#   [] Dexterity will change armor
-#   [] Constitution will change the hp
+#   [x] strength will change roll and damage delt
+#   [x] Dexterity will change armor
+#   [x] Constitution will change the hp
 # Character xp
-#   [] Character has xp
-#   [] character can gain 10 xp with each hit
-#   [] character will level up once xp >= 1000
-#   [] each level will increase the constitution modifier by 5
-#   [] 1 added to attack roll for each level
+#   [x] Character has xp
+#   [x] character can gain 10 xp with each hit
+#   [x] character will level up once xp >= 1000
+#   [x] each level will increase the constitution modifier by 5
+#   [x] 1 added to attack roll for each level
 
 # Character Current Condition
 -   current HP
@@ -74,3 +74,8 @@ races
         -orc
         -elf
     - Inside an IF ELSE statement
+
+# Iteratuin 4
+##  adding weapons
+Plan is to set the weapons as modifiers
+for dagger as example, will add + 1 to the damage, for elfs + 2 for orcs -1
