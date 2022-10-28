@@ -34,10 +34,10 @@
 #   [] 1 added to attack roll for each level
 
 # Character Current Condition
-#   current HP
-#   status (poisoned, burned ect)
-#   equipment
-#   armor
+-   current HP
+-   status (poisoned, burned ect)
+-   equipment
+-   armor
 
 
 
@@ -64,3 +64,13 @@
 - starts with 12 charisma
 - dex levels with player level
 - gains 10 hit points + const mod per level instead of 5
+
+
+# Iteration 3
+
+races
+    -multiple sets of defualt attributes for different races
+        -human
+        -orc
+        -elf
+    - Inside an IF ELSE statement

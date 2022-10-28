@@ -23,11 +23,12 @@ def test_barb_attack():
 
 def test_level_up_hp():
     Dave = Barbarian('Dave', 'Mad Decent', player_level = 2)
-    assert Dave.max_hp == 21
+    assert Dave.max_hp == 23
 
 def test_leveled_hp_with_modifier():
     Dave = Barbarian('Dave', 'Mad Decent', player_level = 2)
-    assert Dave.max_hp == 21
+    assert Dave.strength.modifier == 2
+    assert Dave.max_hp == 23
 
 def test_leveled_up_strength():
     Dave = Barbarian('Dave', 'Mad Decent', player_level = 4)
@@ -49,7 +50,7 @@ def test_barb_scale_level_5():
     assert Dave.strength.level == 20
     assert Dave.strength.modifier == 5
     assert Dave.roll_modifier == 7
-    assert Dave.max_hp == 45
+    assert Dave.max_hp == 65
 
 def test_class_wizard():
     assert Wizard('Willie', 'Shy-Evil')
