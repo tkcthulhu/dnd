@@ -30,3 +30,8 @@ def test_great_axe_barbarian():
     Combat.attack(Keith, 15, Tyler)
     assert Tyler.current_hp == 11
 
+def test_how_hard_does_orc_barbarian_hit():
+    Morgan = Barbarian('Morgan', 'Hotdog is a Taco', weapon=3, race='Orc', player_level=15)
+    Keith = Character('Keith', 'Hotdog is a Sandwich')
+    Combat.attack(Morgan, 20, Keith)
+    assert Keith.current_hp == -47

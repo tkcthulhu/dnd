@@ -69,7 +69,7 @@ class Combat:
 
 class Character:
 
-    DEFAULT_ATTRIBUTES = {
+    HUMAN_ATTRIBUTES = {
         'strength' : 10, 
         'dexterity' : 10, 
         'constitution' : 10, 
@@ -109,6 +109,8 @@ class Character:
     
     def __init__(self, name, align, weapon = 0, race = 'Human', player_level = 1, base_hp = 5, hp_gain = 5, **abilities):
         
+        self.ATTRIBUTES = self.HUMAN_ATTRIBUTES
+
         self.class_type = 'Waste of Skin'
         self.name = name
         self.alignment = align
@@ -118,36 +120,25 @@ class Character:
         self.player_level = player_level
         self.race = race
         self.weapon = self.WEAPONS[weapon]
-        
-        if self.race == 'Human':
 
-            for key in self.DEFAULT_ATTRIBUTES:
-                level = abilities[key] if (key in abilities) else self.DEFAULT_ATTRIBUTES[key]
-                mod = Stats(key, level, Stats.set_modifier(level))
-                setattr(self, key, mod)
-
-        elif self.race == "Orc":
+        if self.race == "Orc":
 
             self.armor_class += 2
 
-            for key in self.ORC_ATTRIBUTES:
-                level = abilities[key] if (key in abilities) else self.ORC_ATTRIBUTES[key]
-                mod = Stats(key, level, Stats.set_modifier(level))
-                setattr(self, key, mod)
+            self.ATTRIBUTES = self.ORC_ATTRIBUTES
 
         elif self.race == 'Elf':
 
-            for key in self.ELF_ATTRIBUTES:
-                level = abilities[key] if (key in abilities) else self.ELF_ATTRIBUTES[key]
-                mod = Stats(key, level, Stats.set_modifier(level))
-                setattr(self, key, mod)
+            self.ATTRIBUTES = self.ELF_ATTRIBUTES
 
         elif self.race == 'Dwarf':
 
-            for key in self.DWARF_ATTRIBUTES:
-                level = abilities[key] if (key in abilities) else self.DWARF_ATTRIBUTES[key]
-                mod = Stats(key, level, Stats.set_modifier(level))
-                setattr(self, key, mod)        
+            self.ATTRIBUTES = self.DWARF_ATTRIBUTES
+
+        for key in self.ATTRIBUTES:
+            level = abilities[key] if (key in abilities) else self.ATTRIBUTES[key]
+            mod = Stats(key, level, Stats.set_modifier(level))
+            setattr(self, key, mod)
 
         self.armor_class += self.dexterity.modifier
 
